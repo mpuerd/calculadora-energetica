@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Energética</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .container { background: white; padding: 20px; max-width: 500px; margin: auto; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        label, select, input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; }
+        button { background: #007bff; color: white; border: none; padding: 10px; width: 100%; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora Energética</h2>
+        <label>Superficie (m²):</label>
+        <input type="number" id="surface" value="100">
+        
+        <label>Año de construcción:</label>
+        <input type="number" id="year" value="2000">
+        
+        <label>Tipo de ventanas:</label>
+        <select id="windows">
+            <option value="single">Vidrio simple</option>
+            <option value="double">Vidrio doble</option>
+        </select>
+        
+        <label>Sistema HVAC:</label>
+        <select id="hvac">
+            <option value="gas">Caldera de gas</option>
+            <option value="heatpump">Bomba de calor</option>
+            <option value="electric">Calefacción eléctrica</option>
+        </select>
+        
+        <label>Tipo de iluminación:</label>
+        <select id="lighting">
+            <option value="incandescent">Incandescente</option>
+            <option value="led">LED</option>
+        </select>
+        
+        <button onclick="calculateEnergy()">Calcular</button>
+        
+        <h3>Resultados:</h3>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculateEnergy() {
+            let surface = document.getElementById("surface").value;
+            let year = document.getElementById("year").value;
+            let windows = document.getElementById("windows").value;
+            let hvac = document.getElementById("hvac").value;
+            let lighting = document.getElementById("lighting").value;
+            
+            let baseConsumption = surface * (year < 1980 ? 100 : year < 2007 ? 70 : 50);
+            let windowFactor = windows === "single" ? 1.2 : 1.0;
+            let hvacFactor = hvac === "gas" ? 1.1 : hvac === "heatpump" ? 0.8 : 1.3;
+            let lightingFactor = lighting === "incandescent" ? 1.3 : 1.0;
+            
+            let totalConsumption = baseConsumption * windowFactor * hvacFactor * lightingFactor;
+            
+            let rating = totalConsumption < 50 ? "A" : totalConsumption < 75 ? "B" : totalConsumption < 100 ? "C" : totalConsumption < 150 ? "D" : totalConsumption < 210 ? "E" : totalConsumption < 250 ? "F" : "G";
+            
+            document.getElementById("result").innerHTML = `Consumo estimado: <strong>${totalConsumption.toFixed(2)}</strong> kWh/m²·año <br> Calificación energética: <strong>${rating}</strong>`;
+        }
+    </script>
+</body>
+</html>
